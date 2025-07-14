@@ -1,1 +1,1 @@
-Adds a couple changes for my site
+Adds/removes some things for my site
