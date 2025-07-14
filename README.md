@@ -1,1 +1,1 @@
-Joe T Emulator
+EmulatorJS
