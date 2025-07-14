@@ -108,7 +108,7 @@ class EmulatorJS {
                 path = this.config.filePaths[path.split("/").pop()];
             }
             let url;
-            try { url = new URL(path) } catch(e) {};
+            try { url = new URL(path) } catch (e) { };
             if (url && !["http:", "https:"].includes(url.protocol)) {
                 //Most commonly blob: urls. Not sure what else it could be
                 if (opts.method === "HEAD") {
@@ -121,11 +121,11 @@ class EmulatorJS {
                         res = await res.arrayBuffer();
                     } else {
                         res = await res.text();
-                        try { res = JSON.parse(res) } catch(e) {}
+                        try { res = JSON.parse(res) } catch (e) { }
                     }
                     if (path.startsWith("blob:")) URL.revokeObjectURL(path);
                     cb({ data: res, headers: {} });
-                } catch(e) {
+                } catch (e) {
                     cb(-1);
                 }
                 return;
@@ -137,14 +137,14 @@ class EmulatorJS {
                     progressCB(progress);
                 });
             }
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.readyState === xhr.DONE) {
                     let data = xhr.response;
                     if (xhr.status.toString().startsWith("4") || xhr.status.toString().startsWith("5")) {
                         cb(-1);
                         return;
                     }
-                    try { data = JSON.parse(data) } catch(e) {}
+                    try { data = JSON.parse(data) } catch (e) { }
                     cb({
                         data: data,
                         headers: {
@@ -209,22 +209,6 @@ class EmulatorJS {
         this.config = config;
         this.config.buttonOpts = this.buildButtonOptions(this.config.buttonOpts);
         this.config.settingsLanguage = window.EJS_settingsLanguage || false;
-        switch (this.config.browserMode) {
-            case 1: // Force mobile
-            case "1":
-            case "mobile":
-                if (this.debug) { console.log("Force mobile mode is enabled"); }
-                this.config.browserMode = 1;
-                break;
-            case 2: // Force desktop
-            case "2":
-            case "desktop":
-                if (this.debug) { console.log("Force desktop mode is enabled"); }
-                this.config.browserMode = 2;
-                break;
-            default: // Auto detect
-                config.browserMode = undefined;
-        }
         this.currentPopup = null;
         this.isFastForward = false;
         this.isSlowMotion = false;
@@ -246,20 +230,12 @@ class EmulatorJS {
             this.config.adSize = (Array.isArray(this.config.adSize)) ? this.config.adSize : ["300px", "250px"];
             this.setupAds(this.config.adUrl, this.config.adSize[0], this.config.adSize[1]);
         }
-        this.isMobile = (() => {
-            // browserMode can be either a 1 (force mobile), 2 (force desktop) or undefined (auto detect)
-            switch (this.config.browserMode) {
-                case 1:
-                    return true;
-                case 2:
-                    return false;
-            }
-
+        this.isMobile = (function () {
             let check = false;
             (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera);
             return check;
         })();
-        this.hasTouchScreen = (function() {
+        this.hasTouchScreen = (function () {
             if (window.PointerEvent && ("maxTouchPoints" in navigator)) {
                 if (navigator.maxTouchPoints > 0) {
                     return true;
@@ -351,7 +327,7 @@ class EmulatorJS {
     }
     setColor(color) {
         if (typeof color !== "string") color = "";
-        let getColor = function(color) {
+        let getColor = function (color) {
             color = color.toLowerCase();
             if (color && /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/.test(color)) {
                 if (color.length === 4) {
@@ -423,7 +399,7 @@ class EmulatorJS {
         } else {
             try {
                 document.querySelector('div[class="ejs_ad_iframe"]').remove();
-            } catch(e) {}
+            } catch (e) { }
             this.config.adUrl = url;
             this.setupAds(this.config.adUrl, this.config.adSize[0], this.config.adSize[1]);
         }
@@ -1042,7 +1018,7 @@ class EmulatorJS {
             if (this.config.fullscreenOnLoad) {
                 try {
                     this.toggleFullscreen(true);
-                } catch(e) {
+                } catch (e) {
                     if (this.debug) console.warn("Could not fullscreen on load");
                 }
             }
@@ -1051,7 +1027,7 @@ class EmulatorJS {
                 //Safari is --- funny
                 this.checkStarted();
             }
-        } catch(e) {
+        } catch (e) {
             console.warn("Failed to start game", e);
             this.startGameError(this.localization("Failed to start game"));
             this.callEvent("exit");
@@ -1301,7 +1277,7 @@ class EmulatorJS {
             displayName: "Cheats"
         },
         volumeSlider: {
-            visible: true
+            visible: false
         },
         saveSavFiles: {
             visible: true,
@@ -1343,7 +1319,7 @@ class EmulatorJS {
             displayName: "Disks"
         },
         contextMenu: {
-            visible: true,
+            visible: false,
             icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>',
             displayName: "Context Menu"
         }
@@ -1365,23 +1341,14 @@ class EmulatorJS {
                     searchKey = this.defaultButtonAliases[key];
                 }
 
-                // Check if the button exists in the default buttons, and update its properties
-                // If the button does not exist, create a custom button
-                if (!mergedButtonOptions[searchKey]) {
-                    // If the button does not exist in the default buttons, create a custom button
-                    // Custom buttons must have a displayName, icon, and callback property
-                    if (!buttonUserOpts[searchKey] || !buttonUserOpts[searchKey].displayName || !buttonUserOpts[searchKey].icon || !buttonUserOpts[searchKey].callback) {
-                        console.warn(`Custom button "${searchKey}" is missing required properties`);
-                        continue;
-                    }
+                // prevent the contextMenu button from being overridden
+                if (searchKey === "contextMenu")
+                    continue;
 
-                    mergedButtonOptions[searchKey] = {
-                        visible: true,
-                        displayName: buttonUserOpts[searchKey].displayName || searchKey,
-                        icon: buttonUserOpts[searchKey].icon || "",
-                        callback: buttonUserOpts[searchKey].callback || (() => { }),
-                        custom: true
-                    };
+                // Check if the button exists in the default buttons, and update its properties
+                if (!mergedButtonOptions[searchKey]) {
+                    console.warn(`Button "${searchKey}" is not a valid button.`);
+                    continue;
                 }
 
                 // if the value is a boolean, set the visible property to the value
@@ -1389,11 +1356,8 @@ class EmulatorJS {
                     mergedButtonOptions[searchKey].visible = buttonUserOpts[searchKey];
                 } else if (typeof buttonUserOpts[searchKey] === "object") {
                     // If the value is an object, merge it with the default button properties
-    
-                    // if the button is the contextMenu, only allow the visible property to be set
-                    if (searchKey === "contextMenu") {
-                        mergedButtonOptions[searchKey].visible = buttonUserOpts[searchKey].visible !== undefined ? buttonUserOpts[searchKey].visible : true;
-                    } else if (this.defaultButtonOptions[searchKey]) {
+
+                    if (this.defaultButtonOptions[searchKey]) {
                         // copy properties from the button definition if they aren't null
                         for (const prop in buttonUserOpts[searchKey]) {
                             if (buttonUserOpts[searchKey][prop] !== null) {
@@ -1416,18 +1380,18 @@ class EmulatorJS {
                         }
                     }
                 }
-    
+
                 // behaviour exceptions
                 switch (searchKey) {
                     case "playPause":
                         mergedButtonOptions.play.visible = mergedButtonOptions.playPause.visible;
                         mergedButtonOptions.pause.visible = mergedButtonOptions.playPause.visible;
                         break;
-    
+
                     case "mute":
                         mergedButtonOptions.unmute.visible = mergedButtonOptions.mute.visible;
                         break;
-    
+
                     case "fullscreen":
                         mergedButtonOptions.enterFullscreen.visible = mergedButtonOptions.fullscreen.visible;
                         mergedButtonOptions.exitFullscreen.visible = mergedButtonOptions.fullscreen.visible;
@@ -1492,6 +1456,7 @@ class EmulatorJS {
                 hideMenu();
             });
         });
+        screenshot.style.display = "none";
 
         let screenMediaRecorder = null;
         const startScreenRecording = addButton("Start Screen Recording", false, () => {
@@ -1503,6 +1468,8 @@ class EmulatorJS {
             stopScreenRecording.removeAttribute("hidden");
             hideMenu();
         });
+        startScreenRecording.style.display = "none";
+
         const stopScreenRecording = addButton("Stop Screen Recording", true, () => {
             if (screenMediaRecorder !== null) {
                 screenMediaRecorder.stop();
@@ -1512,6 +1479,7 @@ class EmulatorJS {
             stopScreenRecording.setAttribute("hidden", "hidden");
             hideMenu();
         });
+        stopScreenRecording.style.display = "none";
 
         const qSave = addButton("Quick Save", false, () => {
             const slot = this.getSettingValue("save-state-slot") ? this.getSettingValue("save-state-slot") : "1";
@@ -1673,7 +1641,7 @@ class EmulatorJS {
         if (this.currentPopup !== null) {
             try {
                 this.currentPopup.remove();
-            } catch(e) {}
+            } catch (e) { }
             this.currentPopup = null;
         }
     }
@@ -1810,7 +1778,7 @@ class EmulatorJS {
                 show();
             }
             if (this.menu.mousemoveListener) this.removeEventListener(this.menu.mousemoveListener);
-            
+
             if ((this.preGetSetting("menubarBehavior") || "downward") === "downward") {
                 this.menu.mousemoveListener = this.addEventListener(this.elements.parent, "mousemove", mouseListener);
             } else {
@@ -1868,7 +1836,7 @@ class EmulatorJS {
             }
             return both ? [button, svg, text] : button;
         }
-        
+
         const restartButton = addButton(this.config.buttonOpts.restart, () => {
             if (this.isNetplay && this.netplay.owner) {
                 this.gameManager.restart();
@@ -1931,7 +1899,7 @@ class EmulatorJS {
             let state;
             try {
                 state = this.gameManager.getState();
-            } catch(e) {
+            } catch (e) {
                 this.displayMessage(this.localization("FAILED TO SAVE STATE"));
                 return;
             }
@@ -2020,7 +1988,7 @@ class EmulatorJS {
         const netplay = addButton(this.config.buttonOpts.netplay, async () => {
             this.openNetplayMenu();
         });
-        
+
         // add custom buttons
         // get all elements from this.config.buttonOpts with custom: true
         if (this.config.buttonOpts) {
@@ -2038,12 +2006,14 @@ class EmulatorJS {
 
         const volumeSettings = this.createElement("div");
         volumeSettings.classList.add("ejs_volume_parent");
+
         const muteButton = addButton(this.config.buttonOpts.mute, () => {
             muteButton.style.display = "none";
             unmuteButton.style.display = "";
             this.muted = true;
             this.setVolume(0);
         }, volumeSettings);
+
         const unmuteButton = addButton(this.config.buttonOpts.unmute, () => {
             if (this.volume === 0) this.volume = 0.5;
             muteButton.style.display = "";
@@ -2051,27 +2021,12 @@ class EmulatorJS {
             this.muted = false;
             this.setVolume(this.volume);
         }, volumeSettings);
-        unmuteButton.style.display = "none";
 
-        const volumeSlider = this.createElement("input");
-        volumeSlider.setAttribute("data-range", "volume");
-        volumeSlider.setAttribute("type", "range");
-        volumeSlider.setAttribute("min", 0);
-        volumeSlider.setAttribute("max", 1);
-        volumeSlider.setAttribute("step", 0.01);
-        volumeSlider.setAttribute("autocomplete", "off");
-        volumeSlider.setAttribute("role", "slider");
-        volumeSlider.setAttribute("aria-label", "Volume");
-        volumeSlider.setAttribute("aria-valuemin", 0);
-        volumeSlider.setAttribute("aria-valuemax", 100);
+        unmuteButton.style.display = "none";
 
         this.setVolume = (volume) => {
             this.saveSettings();
             this.muted = (volume === 0);
-            volumeSlider.value = volume;
-            volumeSlider.setAttribute("aria-valuenow", volume * 100);
-            volumeSlider.setAttribute("aria-valuetext", (volume * 100).toFixed(1) + "%");
-            volumeSlider.setAttribute("style", "--value: " + volume * 100 + "%;margin-left: 5px;position: relative;z-index: 2;");
             if (this.Module.AL && this.Module.AL.currentCtx && this.Module.AL.currentCtx.sources) {
                 this.Module.AL.currentCtx.sources.forEach(e => {
                     e.gain.gain.value = volume;
@@ -2081,19 +2036,6 @@ class EmulatorJS {
                 unmuteButton.style.display = (volume === 0) ? "" : "none";
                 muteButton.style.display = (volume === 0) ? "none" : "";
             }
-        }
-
-        this.addEventListener(volumeSlider, "change mousemove touchmove mousedown touchstart mouseup", (e) => {
-            setTimeout(() => {
-                const newVal = parseFloat(volumeSlider.value);
-                if (newVal === 0 && this.muted) return;
-                this.volume = newVal;
-                this.setVolume(this.volume);
-            }, 5);
-        })
-
-        if (!this.config.buttonOpts || this.config.buttonOpts.volume !== false) {
-            volumeSettings.appendChild(volumeSlider);
         }
 
         this.elements.menu.appendChild(volumeSettings);
@@ -2191,8 +2133,8 @@ class EmulatorJS {
                 enter.style.display = "none";
                 if (this.isMobile) {
                     try {
-                        screen.orientation.lock(this.getCore(true) === "nds" ? "portrait" : "landscape").catch(e => {});
-                    } catch(e) {}
+                        screen.orientation.lock(this.getCore(true) === "nds" ? "portrait" : "landscape").catch(e => { });
+                    } catch (e) { }
                 }
             } else {
                 if (document.exitFullscreen) {
@@ -2209,7 +2151,7 @@ class EmulatorJS {
                 if (this.isMobile) {
                     try {
                         screen.orientation.unlock();
-                    } catch(e) {}
+                    } catch (e) { }
                 }
             }
         }
@@ -2311,7 +2253,7 @@ class EmulatorJS {
                 pauseButton.style.display = "none";
                 playButton.style.display = "none";
             }
-            if (this.config.buttonOpts.contextMenu.visible === false && this.config.buttonOpts.rightClick !== false && this.isMobile === false) contextMenuButton.style.display = "none"
+            if (this.config.buttonOpts.contextMenuButton === false && this.config.buttonOpts.rightClick !== false && this.isMobile === false) contextMenuButton.style.display = "none"
             if (this.config.buttonOpts.restart.visible === false) restartButton.style.display = "none"
             if (this.config.buttonOpts.settings.visible === false) settingButton[0].style.display = "none"
             if (this.config.buttonOpts.fullscreen.visible === false) {
@@ -3518,7 +3460,7 @@ class EmulatorJS {
                         console.warn("Missing input_value for button " + set[i].text + "! Using default gamepad settings");
                         return false;
                     }
-                } catch(e) {
+                } catch (e) {
                     console.warn("Error checking values! Using default gamepad settings");
                     return false;
                 }
@@ -4198,7 +4140,7 @@ class EmulatorJS {
                 if (coreSpecific && coreSpecific.settings) {
                     return coreSpecific.settings[setting];
                 }
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4235,7 +4177,7 @@ class EmulatorJS {
                     rv += `${k} = ${value}\n`;
                 }
                 return rv;
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4269,7 +4211,7 @@ class EmulatorJS {
                     this.cheats.push(cheat);
                 }
 
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4280,7 +4222,7 @@ class EmulatorJS {
                 this.volume = ejs_settings.volume;
                 this.muted = ejs_settings.muted;
                 this.setVolume(this.muted ? 0 : this.volume);
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4637,7 +4579,7 @@ class EmulatorJS {
                 pageTitle.innerText = title;
                 pageTitle.classList.add("ejs_menu_text_a");
                 button.appendChild(pageTitle);
-                
+
                 // const optionsMenu = this.createElement("div");
                 // optionsMenu.classList.add("ejs_setting_menu");
                 // menu.appendChild(optionsMenu);
@@ -4819,14 +4761,8 @@ class EmulatorJS {
         if (core && core.length > 1) {
             addToMenu(this.localization("Core" + " (" + this.localization("Requires restart") + ")"), "retroarch_core", core, this.getCore(), home);
         }
-        if (typeof window.SharedArrayBuffer === "function" && !this.requiresThreads(this.getCore())) {
-            addToMenu(this.localization("Threads"), "ejs_threads", {
-                "enabled": this.localization("Enabled"),
-                "disabled": this.localization("Disabled")
-            }, this.config.threads ? "enabled" : "disabled", home);
-        }
 
-        const graphicsOptions = createSettingParent(true, "Graphics Settings", home);
+        const graphicsOptions = createSettingParent(true, "Graphics Options", home);
 
         if (this.config.shaders) {
             const builtinShaders = {
@@ -4881,102 +4817,6 @@ class EmulatorJS {
             "2": "180 deg",
             "3": "270 deg"
         }, this.videoRotation.toString(), graphicsOptions, true);
-
-        const screenCaptureOptions = createSettingParent(true, "Screen Capture", home);
-
-        addToMenu(this.localization("Screenshot Source"), "screenshotSource", {
-            "canvas": "canvas",
-            "retroarch": "retroarch"
-        }, this.capture.photo.source, screenCaptureOptions, true);
-
-        let screenshotFormats = {
-            "png": "png",
-            "jpeg": "jpeg",
-            "webp": "webp"
-        }
-        if (this.isSafari) {  
-            delete screenshotFormats["webp"]; 
-        }
-        if (!(this.capture.photo.format in screenshotFormats)) {
-            this.capture.photo.format = "png";
-        }
-        addToMenu(this.localization("Screenshot Format"), "screenshotFormat", screenshotFormats, this.capture.photo.format, screenCaptureOptions, true);
-
-        const screenshotUpscale = this.capture.photo.upscale.toString();
-        let screenshotUpscales = {
-            "0": "native",
-            "1": "1x",
-            "2": "2x",
-            "3": "3x"
-        }
-        if (!(screenshotUpscale in screenshotUpscales)) {
-            screenshotUpscales[screenshotUpscale] = screenshotUpscale + "x";
-        }
-        addToMenu(this.localization("Screenshot Upscale"), "screenshotUpscale", screenshotUpscales, screenshotUpscale, screenCaptureOptions, true);
-
-        const screenRecordFPS = this.capture.video.fps.toString();
-        let screenRecordFPSs = {
-            "30": "30",
-            "60": "60"
-        }
-        if (!(screenRecordFPS in screenRecordFPSs)) {
-            screenRecordFPSs[screenRecordFPS] = screenRecordFPS;
-        }
-        addToMenu(this.localization("Screen Recording FPS"), "screenRecordFPS", screenRecordFPSs, screenRecordFPS, screenCaptureOptions, true);
-
-        let screenRecordFormats = {
-            "mp4": "mp4",
-            "webm": "webm"
-        }
-        for (const format in screenRecordFormats) {
-            if (!MediaRecorder.isTypeSupported("video/" + format)) {
-                delete screenRecordFormats[format];
-            }
-        }
-        if (!(this.capture.video.format in screenRecordFormats)) {
-            this.capture.video.format = Object.keys(screenRecordFormats)[0];
-        }
-        addToMenu(this.localization("Screen Recording Format"), "screenRecordFormat", screenRecordFormats, this.capture.video.format, screenCaptureOptions, true);
-
-        const screenRecordUpscale = this.capture.video.upscale.toString();
-        let screenRecordUpscales = {
-            "1": "1x",
-            "2": "2x",
-            "3": "3x",
-            "4": "4x"
-        }
-        if (!(screenRecordUpscale in screenRecordUpscales)) {
-            screenRecordUpscales[screenRecordUpscale] = screenRecordUpscale + "x";
-        }
-        addToMenu(this.localization("Screen Recording Upscale"), "screenRecordUpscale", screenRecordUpscales, screenRecordUpscale, screenCaptureOptions, true);
-
-        const screenRecordVideoBitrate = this.capture.video.videoBitrate.toString();
-        let screenRecordVideoBitrates = {
-            "1048576": "1 Mbit/sec",
-            "2097152": "2 Mbit/sec",
-            "2621440": "2.5 Mbit/sec",
-            "3145728": "3 Mbit/sec",
-            "4194304": "4 Mbit/sec"
-        }
-        if (!(screenRecordVideoBitrate in screenRecordVideoBitrates)) {
-            screenRecordVideoBitrates[screenRecordVideoBitrate] = screenRecordVideoBitrate + " Bits/sec";
-        }
-        addToMenu(this.localization("Screen Recording Video Bitrate"), "screenRecordVideoBitrate", screenRecordVideoBitrates, screenRecordVideoBitrate, screenCaptureOptions, true);
-
-        const screenRecordAudioBitrate = this.capture.video.audioBitrate.toString();
-        let screenRecordAudioBitrates = {
-            "65536": "64 Kbit/sec",
-            "131072": "128 Kbit/sec",
-            "196608": "192 Kbit/sec",
-            "262144": "256 Kbit/sec",
-            "327680": "320 Kbit/sec"
-        }
-        if (!(screenRecordAudioBitrate in screenRecordAudioBitrates)) {
-            screenRecordAudioBitrates[screenRecordAudioBitrate] = screenRecordAudioBitrate + " Bits/sec";
-        }
-        addToMenu(this.localization("Screen Recording Audio Bitrate"), "screenRecordAudioBitrate", screenRecordAudioBitrates, screenRecordAudioBitrate, screenCaptureOptions, true);
-
-        checkForEmptyMenu(screenCaptureOptions);
 
         const speedOptions = createSettingParent(true, "Speed Options", home);
 
@@ -5034,7 +4874,7 @@ class EmulatorJS {
         checkForEmptyMenu(inputOptions);
 
         if (this.saveInBrowserSupported()) {
-            const saveStateOpts = createSettingParent(true, "Save States", home);
+            const saveStateOpts = createSettingParent(true, "Save/State Options", home);
             addToMenu(this.localization("Save State Slot"), "save-state-slot", ["1", "2", "3", "4", "5", "6", "7", "8", "9"], "1", saveStateOpts, true);
             addToMenu(this.localization("Save State Location"), "save-state-location", {
                 "download": this.localization("Download"),
@@ -5072,9 +4912,9 @@ class EmulatorJS {
         let coreOpts;
         try {
             coreOpts = this.gameManager.getCoreOptions();
-        } catch(e) {}
+        } catch (e) { }
         if (coreOpts) {
-            const coreOptions = createSettingParent(true, "Backend Core Options", home);
+            const coreOptions = createSettingParent(true, "Core Options", home);
             coreOpts.split("\n").forEach((line, index) => {
                 let option = line.split("; ");
                 let name = option[0];
@@ -5292,7 +5132,7 @@ class EmulatorJS {
     }
     defineNetplayFunctions() {
         function guidGenerator() {
-            const S4 = function() {
+            const S4 = function () {
                 return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
             };
             return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
@@ -5940,7 +5780,7 @@ class EmulatorJS {
         if (!this.gameManager) return;
         try {
             this.Module.FS.unlink("/shader/shader.glslp");
-        } catch(e) {}
+        } catch (e) { }
 
         if (name === "disabled" || !this.config.shaders[name]) {
             this.gameManager.toggleShader(0);
@@ -5978,7 +5818,7 @@ class EmulatorJS {
         let scaleHeight = imageUpscale;
         let scaleWidth = imageUpscale;
         let scale = 1;
-        
+
         if (screenshotSource === "retroarch") {
             if (width >= height) {
                 width = height * aspectRatio;
@@ -6017,9 +5857,9 @@ class EmulatorJS {
             } else if (width < height && !videoTurned) {
                 height = width / aspectRatio;
             } else if (width >= height && videoTurned) {
-                width = height * (1/aspectRatio);
+                width = height * (1 / aspectRatio);
             } else if (width < height && videoTurned) {
-                width = height / (1/aspectRatio);
+                width = height / (1 / aspectRatio);
             }
             if (imageUpscale === 0) {
                 scale = gameHeight / height;
@@ -6135,9 +5975,9 @@ class EmulatorJS {
             } else if (width < height && !videoTurned) {
                 height = width / aspectRatio;
             } else if (width >= height && videoTurned) {
-                width = height * (1/aspectRatio);
+                width = height * (1 / aspectRatio);
             } else if (width < height && videoTurned) {
-                width = height / (1/aspectRatio);
+                width = height / (1 / aspectRatio);
             }
             canvasAspect = width / height;
             captureCanvas.width = width * captureUpscale;
