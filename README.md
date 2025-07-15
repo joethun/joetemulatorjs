@@ -1,7 +1,10 @@
 <div align="center">
 
   # Fork Of EmulatorJS
+  All this fork does is organizes the menu somewhat and changes texts (So far)
 
+  `I wouldn't recomend you use this unless you really want to for whatever reason`
+  
   [joetemulator.rf.gd](https://joetemulator.rf.gd)
 
   [![Changelog](https://img.shields.io/badge/Changelog-4CAF50?style=for-the-badge)](https://github.com/joethun/joetemulator/wiki/Changelog)
