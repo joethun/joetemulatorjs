@@ -2,7 +2,7 @@
 
   # Fork Of EmulatorJS
 
-  `I wouldn't recomend you use this unless you really want to for whatever reason`
+  `This fork is slightly tweaked for my site, you should use the official version unless this is exactly what you want`
   
   [joetemulator.rf.gd](https://joetemulator.rf.gd)
 
