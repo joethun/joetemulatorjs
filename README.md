@@ -1,7 +1,6 @@
 <div align="center">
 
   # Fork Of EmulatorJS
-  All this fork does is organizes the menu somewhat and changes texts (So far)
 
   `I wouldn't recomend you use this unless you really want to for whatever reason`
   
