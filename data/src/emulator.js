@@ -4788,7 +4788,7 @@ class EmulatorJS {
             addToMenu(this.localization("Core" + " (" + this.localization("Requires restart") + ")"), "retroarch_core", core, this.getCore(), home);
         }
 
-        const graphicsOptions = createSettingParent(true, "Graphics Options", home);
+        const graphicsOptions = createSettingParent(true, "Graphics", home);
 
         if (this.config.shaders) {
             const builtinShaders = {
@@ -4844,7 +4844,7 @@ class EmulatorJS {
             "3": "270 deg"
         }, this.videoRotation.toString(), graphicsOptions, true);
 
-        const speedOptions = createSettingParent(true, "Speed Options", home);
+        const speedOptions = createSettingParent(true, "Game Speed", home);
 
         addToMenu(this.localization("Fast Forward"), "fastForward", {
             "enabled": this.localization("Enabled"),
@@ -4875,7 +4875,7 @@ class EmulatorJS {
             ], "6", speedOptions, true);
         }
 
-        const inputOptions = createSettingParent(true, "Input Options", home);
+        const inputOptions = createSettingParent(true, "Input", home);
 
         addToMenu(this.localization("Menubar Mouse Trigger"), "menubarBehavior", {
             "downward": this.localization("Downward Movement"),
@@ -4900,7 +4900,7 @@ class EmulatorJS {
         checkForEmptyMenu(inputOptions);
 
         if (this.saveInBrowserSupported()) {
-            const saveStateOpts = createSettingParent(true, "Save/State Options", home);
+            const saveStateOpts = createSettingParent(true, "Saves/States", home);
             addToMenu(this.localization("Save State Slot"), "save-state-slot", ["1", "2", "3", "4", "5", "6", "7", "8", "9"], "1", saveStateOpts, true);
             addToMenu(this.localization("Save State Location"), "save-state-location", {
                 "download": this.localization("Download"),
