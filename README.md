@@ -2,7 +2,7 @@
 
   # Fork Of EmulatorJS
 
-  This fork is slightly tweaked for my site, you should use the [official version](https://github.com/EmulatorJS/EmulatorJS) unless this is exactly what you want
+  Changes some things
   
   [joetemulator.rf.gd](https://joetemulator.rf.gd)
 
