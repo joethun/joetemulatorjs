@@ -1503,9 +1503,9 @@ class EmulatorJS {
             save: qSave,
             load: qLoad
         }
-        addButton("EmulatorJS v" + this.ejs_version, false, () => {
+        addButton("Joe T Emulator " + this.ejs_version, false, () => {
             hideMenu();
-            const body = this.createPopup("EmulatorJS", {
+            const body = this.createPopup("Joe T Emulator", {
                 "Close": () => {
                     this.closePopup();
                 }
@@ -1548,7 +1548,7 @@ class EmulatorJS {
             body.appendChild(retroarch);
             body.appendChild(coreLicense);
 
-            home.innerText = "EmulatorJS v" + this.ejs_version;
+            home.innerText = "EmulatorJS";
             home.appendChild(this.createElement("br"));
             home.appendChild(this.createElement("br"));
 
